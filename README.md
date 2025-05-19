@@ -14,30 +14,42 @@ Créer un langage éducatif pour comprendre :
 ---
 
 ## Syntaxe de base
-Chaque instruction doit être sur une ligne.
-Les mots-clé sont sensibles à la casse, ils doivent être ecrits en minuscule.
+Chaque instruction doit être sur une ligne.  
+Les mots-clé sont sensibles à la casse, ils doivent être ecrits en minuscule.  
 Les labels ne peuvent pas avoir d'espace et doivent finir par `:`
-Chaque nom de variable est unique.
-Les commentaires s'ecrivent avec `#`.
-On ne peut `ecrire` que des `variables` ou `chainec`.
-Les `chainec` sont des chaines de characteres réferencé grâce à un label commencant par un `.` et finissant par un `.`
-Les labels ne comportent pas d'espace.
 
 ### Instructions disponibles
 
 | Mot-clé         | Description                     |
 |----------------|----------------------------------|
-| `fixer a 10`        | affecter une valeur à une variable |
+| `definir a 10`        | affecter un nombre à une variable |
 | `somme a b total`  | addition de deux variables        |
 | `ecrire a`     | afficher la valeur d’une variable ou directement un chaine de charactere |
 | `si a == 10 (instruction)` | condition et saut                |
 | `sinon (instruction)`        | ne peut être utilisé qu'immédiatement après un "si"         |
 | `aller label`        | saut inconditionnel              |
 | `fin`        | arret du programme              |
-| `load nom_de_chaine chaine de charactere`  | permet de definir une chainec | 
+| `charger nom_de_chaine chaine de charactere`  | permet de definir une chainec | 
 
-### Type de variable
-- Integer
+### Variable
+On peut definir seulement des nombres (entier ou décimaux) dans les variables (instruction: definir)  
+Les chaines de characteres sont chargés dans les chainec (load .nom.)  
+Les binaires sont disponible via `.Vrai.` et `.Faux.`.  
+Chaque nom de variable ou chainec est unique.  
+Les commentaires s'ecrivent avec `#`.  
+On ne peut `ecrire` que des `variables` ou `chainec`.  
+Les `chainec` sont des chaines de characteres réferencé grâce à un label commencant par un `.` et finissant par un `.`  
+Les labels ne comportent pas d'espace.  
+
+### Mots Clés
+Les mots clés disponiblent sont : 
+- definir
+- somme
+- ecrire
+- si
+- aller
+- fin
+- charger
 
 ### Condition
 Les seuls conditions actuelles sont `==` et `!=`.
@@ -45,8 +57,8 @@ Les seuls conditions actuelles sont `==` et `!=`.
 ### Exemple
 Exemple de programme LineaLang :
 ```
-fixer a 10
-fixer b 5
+definir a 10
+definir b 5
 somme a b total
 si total == 10 aller afficher_total
 sinon aller afficher_fin
@@ -62,8 +74,8 @@ fin
 
 ---
 ## Memoire
-Le programme gere sa memoire grace à un tableau python.
-Il y a une partie pour la gestion des variables et une autre pour la gestion des chainec.
+Le programme gere sa memoire grace à un tableau python.  
+Il y a une partie pour la gestion des variables et une autre pour la gestion des chainec.  
 
 ---
 
@@ -84,12 +96,13 @@ python3 main.py mon_programme.lina
 
 ## À venir
 
-- avoir un espace avec les chaines de caracteres et utiliser leur label
+- gestion des nombres
+- avoir un espace avec les chaines de caracteres et utiliser leur label -> chainec
 - avoir des parties dans le programmes [code, chainec, const]
 - Ajout de la soustraction
 - Gestion des chaînes de caractères
 - Création de PyLang, fin de phrase via un `.`
-- Création du compilateur TonLang -> LineaLang
+- Création du compilateur PyLang -> LineaLang
 
 ## Auteur
 Projet personnel développé par Wanako, dans le but d’apprendre à concevoir un langage.

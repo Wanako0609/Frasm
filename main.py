@@ -7,26 +7,103 @@ Utilisation : python3 main.py fichier.lina
 from pathlib import Path
 import sys
 from loguru import logger
+from numbers import Number
 
 # logger.add(sys.stderr, format="{level} | {message}")
 
-def parsing(ligne: str):
-    pass
+### Définition des fonctions
 
-def fixer(instruc: list):
-    print(instruc)
-    nom_var: str = instruc[0]
+def is_nombre(x):
+    if isinstance(x, Number):
+        print(f"{x} est un nombre")
+    else:
+        print(f"{x} n'est pas un nombre")
+
+def is_variable(var: str): 
+    if var in variable:
+        return True
+    return False
+
+def is_chainec(chaine: str): 
+    if chaine in chainec:
+        return True
+    return False
+
+def get_var(var):
+    if var in variable:
+        return variable[var]
+    logger.critical(f"La variable {var} n'est pas definir")
+    exit()
+
+def get_chainec(chaine: str):
+    if chaine.startswith(".") and chaine.endswith("."):
+        if chaine in chainec:
+            return chainec[chaine]
+        logger.critical(f"La variable {chaine} n'est pas charger")
+        exit() 
+    
+def definir(instruc: list): # instruc[destination, valeur]
+    #print(instruc)
+    destination: str = instruc[0]
     valeur: str = instruc[1]
     
-    if nom_var.isdigit():
+    if destination.isdigit():
         logger.critical("Un nom de variable ne peut pas etre une nombre")
         exit()
     
-    if valeur.isdigit() == False: # Ajouter le test sur les chainec
-        logger.critical("Vous ne pouvez fixer que un nombre ou un label de chainec")
+    if valeur.isdigit() == False: 
+        logger.critical("Vous ne pouvez definir que un nombre")
+        exit()
+    else:
+        valeu = valeur
+
+    variable[destination] = valeur
+
+def ecrire(instruc: list): # instruc[variable]
+    #print(instruc)
+
+    # Que une variable a la fois
+    if len(instruc) != 1:
+        logger.critical("Vous ne pouvez ecrire que le contenue d'une variable ou un label d'une chainec")
+        exit()
+    
+    # Cas variable
+    if is_variable(instruc[0]): 
+        print(get_var(instruc[0]))
+    else:
+        logger.critical("Cette variable n'existe pas")
         exit()
 
-    variable[nom_var] = valeur
+def somme(instruc: list):
+    # Que une variable a la fois
+    if len(instruc) != 3:
+        logger.critical("Syntaxe erreur: somme a b destination")
+        exit()
+    
+    arg_a = instruc[0]
+    arg_b = instruc[1]
+    destination = instruc[2]
+
+    if is_variable(arg_a) and is_variable(arg_b):
+        a: Number = get_var(arg_a)
+        b: Number = get_var(arg_b)
+        total = a + b
+
+        definir([destination, total])
+             
+    else:
+        logger.critical("Syntaxe erreur: les 2 variables doivent etre des Nombres")
+
+
+#### Definition des variables
+# Espace memoire
+variable = {}
+chainec = {}
+
+# Mot clé
+mots_cle = ["Vrai", "Faux", "definir", "ecrire", "somme", "fin"]
+
+#### Début du programme
 
 # Gestion des arguments
 if len(sys.argv) != 2:
@@ -43,10 +120,6 @@ if fichier.suffix != ".linea":
     exit(1)
 
 logger.info(f"Fichier interprété : {fichier.name}")
-
-# Espace memoire
-variable = {}
-chainec = {}
 
 # Preparation fichier
 contenu = fichier.read_text()
@@ -67,15 +140,15 @@ while (running):
     if ligne.startswith('#'):
         continue
         
-    instruc = ligne.split(' ')
+    instruc = ligne.strip().split(' ')
 
     match instruc[0]:
-        case "fixer":
-            fixer(instruc[1:])
+        case "definir":
+            definir(instruc[1:])
         case "somme":
-            print("somme")
+            somme(instruc[1:])
         case "ecrire":
-            print("ecrire")
+            ecrire(instruc[1:])
         case "fin":
             running = False
         case _:

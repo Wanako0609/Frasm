@@ -1,7 +1,8 @@
-fixer a 10
-fixer b9 598
+definir a 10
+definir b 20
 
-fixer 3a 533
-fixer bkkjlds 8978
-fixer tezd 98
+somme a b c
+ecrire a 
+ecrire b
+ecrire c
 fin
