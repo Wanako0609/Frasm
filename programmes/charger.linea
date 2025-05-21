@@ -1,0 +1,17 @@
+# definition
+definir a 10
+definir b 20
+
+somme a b c
+# ecrire a 
+# ecrire b
+# ecrire c
+
+charger .bj. bonjour
+charger .cv. comment ça va 
+
+ecrire .bj. .cv. c  
+
+charger .bj. NON
+ecrire .bj.
+fin

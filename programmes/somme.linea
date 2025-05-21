@@ -1,0 +1,18 @@
+# definition
+definir a 10
+definir b 20
+
+somme a b c
+ecrire a 
+ecrire b
+ecrire c
+
+# Test breaking
+definir c 50
+ecrire c
+soustraire c a b
+ecrire b
+
+somme b c c
+ecrire c
+fin

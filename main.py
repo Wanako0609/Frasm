@@ -3,105 +3,24 @@ main.py
 Programme principal permettant d'interpréter du Linealang (.linea)
 Utilisation : python3 main.py fichier.lina
 """
-
 from pathlib import Path
 import sys
-from loguru import logger
-from numbers import Number
+from libs.instruction import *
 
-# logger.add(sys.stderr, format="{level} | {message}")
+def create_sous_partie(contenue):
+    for i in range(len(contenue)):
+        if contenue[i].endswith(":") and contenue[i][0].isupper():
+            sous_partie_memory[contenue[i]] = i
+    
+    return get_sous_partie("Principal:")
 
-### Définition des fonctions
-
-def is_nombre(x):
-    if isinstance(x, Number):
-        print(f"{x} est un nombre")
-    else:
-        print(f"{x} n'est pas un nombre")
-
-def is_variable(var: str): 
-    if var in variable:
-        return True
-    return False
-
-def is_chainec(chaine: str): 
-    if chaine in chainec:
-        return True
-    return False
-
-def get_var(var):
-    if var in variable:
-        return variable[var]
-    logger.critical(f"La variable {var} n'est pas definir")
+def get_sous_partie(partie):
+    if sous_partie_memory[partie] is set:
+        return sous_partie_memory[partie]
+    logger.critical(f"Erreur : Partie {partie} pas trouvé")
     exit()
 
-def get_chainec(chaine: str):
-    if chaine.startswith(".") and chaine.endswith("."):
-        if chaine in chainec:
-            return chainec[chaine]
-        logger.critical(f"La variable {chaine} n'est pas charger")
-        exit() 
-    
-def definir(instruc: list): # instruc[destination, valeur]
-    #print(instruc)
-    destination: str = instruc[0]
-    valeur: str = instruc[1]
-    
-    if destination.isdigit():
-        logger.critical("Un nom de variable ne peut pas etre une nombre")
-        exit()
-    
-    if valeur.isdigit() == False: 
-        logger.critical("Vous ne pouvez definir que un nombre")
-        exit()
-    else:
-        valeu = valeur
-
-    variable[destination] = valeur
-
-def ecrire(instruc: list): # instruc[variable]
-    #print(instruc)
-
-    # Que une variable a la fois
-    if len(instruc) != 1:
-        logger.critical("Vous ne pouvez ecrire que le contenue d'une variable ou un label d'une chainec")
-        exit()
-    
-    # Cas variable
-    if is_variable(instruc[0]): 
-        print(get_var(instruc[0]))
-    else:
-        logger.critical("Cette variable n'existe pas")
-        exit()
-
-def somme(instruc: list):
-    # Que une variable a la fois
-    if len(instruc) != 3:
-        logger.critical("Syntaxe erreur: somme a b destination")
-        exit()
-    
-    arg_a = instruc[0]
-    arg_b = instruc[1]
-    destination = instruc[2]
-
-    if is_variable(arg_a) and is_variable(arg_b):
-        a: Number = get_var(arg_a)
-        b: Number = get_var(arg_b)
-        total = a + b
-
-        definir([destination, total])
-             
-    else:
-        logger.critical("Syntaxe erreur: les 2 variables doivent etre des Nombres")
-
-
-#### Definition des variables
-# Espace memoire
-variable = {}
-chainec = {}
-
-# Mot clé
-mots_cle = ["Vrai", "Faux", "definir", "ecrire", "somme", "fin"]
+# La fin de sous partie devrait etre des que il y aura une ligne vide, si c'est la partie main on fini le programme
 
 #### Début du programme
 
@@ -126,12 +45,14 @@ contenu = fichier.read_text()
 contenue_lecture = contenu.splitlines()
 
 # Initialisation
-pointeur = -1
+pointeur = create_sous_partie(contenue_lecture) -1
 running = True
+is_fonction = False
+
 
 while (running):
     pointeur += 1 # Increase pointeur
-    if pointeur > len(contenue_lecture): # test fin du fichier
+    if pointeur == len(contenue_lecture)-1: # test fin du fichier
         running = False
 
     ligne = contenue_lecture[pointeur]
@@ -147,10 +68,20 @@ while (running):
             definir(instruc[1:])
         case "somme":
             somme(instruc[1:])
+        case "soustraire":
+            soustraire(instruc[1:])
         case "ecrire":
             ecrire(instruc[1:])
+        case "charger":
+            charger(instruc[1:])
         case "fin":
             running = False
+        case "":
+            if len(instruc) == 0:
+                if not is_fonction:
+                    running = False
+                else:
+                    is_fonction = False
         case _:
             pass
 

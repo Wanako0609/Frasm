@@ -1,8 +1,0 @@
-definir a 10
-definir b 20
-
-somme a b c
-ecrire a 
-ecrire b
-ecrire c
-fin
