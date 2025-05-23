@@ -1,9 +1,0 @@
-Main:
-definir a 10
-charger .test. test
-
-Sous-partie:
-definir a 10
-charger .test. test
-
-fin

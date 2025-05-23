@@ -1,0 +1,16 @@
+
+Sous_partie:
+definir a 10
+charger .test. test2
+ecrire .test.
+revenir
+
+Principale:
+definir a 10
+charger .test. test1
+ecrire .test.
+aller Sous_partie
+ecrire .test.
+
+
+fin
