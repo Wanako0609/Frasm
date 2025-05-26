@@ -1,71 +1,86 @@
 # FRASM
 
-**FRASM** (abréviation de FRAASM : "France Assembleur") est un langage de programmation type assembleur minimaliste entièrement en français, conçu pour être simple, lisible, et exécuté à l'aide d'une machine virtuelle en Python.
+**FRASM** (abréviation de FRAASM : "France Assembleur") est un langage de programmation de type assembleur, minimaliste et entièrement en français.  
+Il est conçu pour être simple, lisible et exécuté à l'aide d'une machine virtuelle en Python.
 
 ---
 
-## Objectif
+## Objectifs
 
 ### Personnel
 Créer un langage simple pour comprendre :
-- la création d'un langage interprété
-- la gestion des variables, instructions, sauts, et conditions
+- la création d’un langage interprété
+- la gestion des variables, instructions, sauts et conditions
 
-### Language
-Créer un langage éducatif accessible à un large public en brisant la barierre de la langue.
-Implémentation simple et logique d'opération.  
-Mise en oeuvre de pseudo code
+### Langage
+Proposer un langage éducatif accessible à un large public, en brisant la barrière de la langue.  
+Offrir une implémentation claire, basée sur des opérations logiques simples.  
+FRASM s’inspire du pseudo-code et facilite l’apprentissage des bases de la programmation.
 
 ---
 
 ## Syntaxe de base
-Le programme est structuré en différente section, dont la section `Principal:`, dans le quel se trouve la partie principal du programme.  
 
+Le programme est structuré en différentes sections, dont la section `Principal:`, dans laquelle se trouve la partie principale du programme.  
 
-#### Tableau des instructions minimalistes
+### Instructions minimales
 
-| Mot-clé                                        | Description                                                    |
-|------------------------------------------------|----------------------------------------------------------------|
-| `definir a 10`                                 | affecter un nombre à une variable                              |
-| `charger .nom_de_chaine. chaine de charactere` | permet de definir une chainec                                  | 
-| `ecrire a`                                     | afficher la valeur d’une variable ou d'une chaine de caractere |
-| `si a == 10 (instruction)`                     | condition                                                      |
-| `aller label`                                  | saut inconditionnel                                            |
-| `fin`                                          | arret du programme                                             |
-
+| Mot-clé                                         | Description                                                   |
+|------------------------------------------------|---------------------------------------------------------------|
+| `definir a 10`                                  | Affecte un nombre à une variable                              |
+| `charger .nom_de_chaine. chaîne de caractères` | Définit une chaîne de caractères référencée (`chainec`)       |
+| `ecrire a`                                      | Affiche la valeur d’une variable ou d’une chaîne de caractères |
+| `si a == 10 (instruction)`                      | Condition (égalité ou différence)                             |
+| `aller label`                                   | Saut inconditionnel vers un label                             |
+| `fin`                                           | Arrête l’exécution du programme                               |
 
 ---
 
-## Programme d'exemple
+## Exemple de programme FRASM
 
-Exemple de programme en FRASM :
-```
-
-Principal: # Section Principal obligatoire
+```frasm
+Principal: # Section principale obligatoire
 definir a 10 # a = 10
-definir b 5 # b = 5
+definir b 5  # b = 5
 somme a b total # total = a + b
-ecrire total # affiche total (15)
-si total > 10 aller plus_10 
+ecrire total # affiche 15
+si total > 10 aller Plus_10 
 sinon aller Moins_10
 
 Plus_10:
 charger .afficher. 10 + 5 = 
-ecrire .afficher. total
-aller afficher_fin
+ecrire .afficher.
+ecrire total
+aller Fin_Affichage
 
 Moins_10:
+charger .afficher. 10 - 5 = 
+ecrire .afficher.
+ecrire total
+aller Fin_Affichage
 
-
-afficher_fin:
+Fin_Affichage:
 charger .fin_. Fin du programme
 ecrire .fin_.
 fin
 ```
---- 
+
+**Résultat attendu :**
+
+```
+15
+10 + 5 = 15
+Fin du programme
+```
+
+---
 
 ## Installation
-Ce projet ne nécessite aucune dépendance. Utilisez Python 3.12 ou supérieur.
+
+Ce projet ne nécessite aucune dépendance.
+Utilisez Python 3.12 ou supérieur.
+
+---
 
 ## Exécution
 
@@ -73,17 +88,24 @@ Ce projet ne nécessite aucune dépendance. Utilisez Python 3.12 ou supérieur.
 python3 main.py mon_programme.frasm
 ```
 
-## Dossiers
+---
 
-- `programmes/` : Contient des exemples de programmes en FRASM (.frasm)
-- `docs/` : Contient la documentation et les spécifications du langage
-- `libs/` : Contient les spécifications du langage
+## Organisation des dossiers
+
+* `programmes/` : contient des exemples de programmes en FRASM (`.frasm`)
+* `docs/` : contient la documentation et les spécifications du langage
+* `libs/` : contient les composants internes du langage (machine virtuelle, instructions, etc.)
+
+---
 
 ## À venir
-- avoir des parties dans le programmes [code, chainec, const]
-- Gestion des chaînes de caractères
-- Création de PyLang, fin de phrase via un `.`
-- Création du compilateur PyLang -> FRASM
+
+* Création de PyLang, un langage plus haut niveau compilé vers FRASM
+* Fin de ligne via un `.` dans PyLang
+* Création du compilateur PyLang → FRASM
+
+---
 
 ## Auteur
-Projet personnel développé par Wanako, dans le but d’apprendre à concevoir un langage.
+
+Projet personnel développé par Wanako, dans le but d’apprendre à concevoir un langage de programmation simple et pédagogique.
