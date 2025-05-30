@@ -1,16 +1,26 @@
 
-Sous_partie:
-definir a 10
-charger .test. test2
-ecrire .test.
+Sous1:
+charger .1. sous1
+ecrire .1.
+aller Sous2
 revenir
 
 Principale:
-definir a 10
-charger .test. test1
-ecrire .test.
-aller Sous_partie
-ecrire .test.
-
-
+charger .principal. principale
+ecrire .principal.
+aller Sous1
+charger .fin. FINNN
+ecrire .fin. .principal.
 fin
+
+Sous2:
+charger .2. sous2
+ecrire .2.
+aller Sous3
+revenir
+
+Sous3:
+charger .3. sous3
+ecrire .3.
+charger .principal. principal changer
+revenir

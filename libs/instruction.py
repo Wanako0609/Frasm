@@ -1,11 +1,14 @@
 from loguru import logger
 from numbers import Number
 
+from libs.logger import error_and_exit
+
 ### Definition des variables
 # Espace memoire
 variable = {}
 chainec = {}
 sous_partie_memory = {}
+pile_sous_partie = []
 
 # Mot clé
 mots_cle = ["Vrai", "Faux", "definir", "ecrire", "somme", "soustraire", "fin"]
@@ -27,6 +30,7 @@ def is_chainec(chaine: str):
     """
     Permet de verifier si la chaine fait partie des chaine charger
     """
+    #print("test si ", chaine, " in chainec :", chainec)
     if chaine in chainec:
         return True
     return False
@@ -45,52 +49,58 @@ def get_var(var):
             except (ValueError, TypeError):
                 raise ValueError(f"{variable[var]!r} n'est pas un nombre")
     else:
-        logger.critical(f"Erreur: La variable {var} n'est pas defini")
-        exit()
+        error_and_exit("get_var", f"La variable {var} n'est pas defini")
+        return None
 
 def get_chainec(chaine: str):
     if is_chainec:
         if chaine.startswith(".") and chaine.endswith("."):
             if chaine in chainec:
                 return chainec[chaine]
-                
-            logger.critical("La variable n'a pas le bon format")
+
+            error_and_exit("get_chainec", f"La variable {chaine} n'a pas le bon format")
+            return None
+        return None
     else:
-        logger.critical(f"La variable {chaine} n'est pas charger")
-        exit() 
+        error_and_exit("get_var", f"La chainec {chaine} n'est pas defini")
+        return None
 
 #### Instruction
 
-def definir(instruc: list): # instruc[destination, valeur]
-    #print(instruc)
-    destination: str = instruc[0]
-    valeur: str = instruc[1]
-    
+def definir(instruc: list):
+    if len(instruc) != 2:
+        logger.critical("definir : syntaxe invalide → attendu 'definir variable valeur'")
+        exit(1)
+
+    destination = instruc[0]
+    valeur = instruc[1]
+
     if destination.isdigit():
-        logger.critical("Un nom de variable ne peut pas etre une nombre")
-        exit()
-    
+        logger.critical(f"definir : nom de variable invalide → '{destination}' est un nombre.")
+        exit(1)
+
     if destination in mots_cle:
-        logger.critical("Un nom de variable ne peut pas etre un mot clé")
-        exit()
-    
-    if is_nombre(valeur) == False and valeur.isdigit() == False: 
-        logger.critical("Vous ne pouvez definir que un nombre")
-        exit()
-    else:
-        try:
-            valeur = int(valeur)
-        except (ValueError, TypeError):
-            valeur = float(valeur)
-            
+        logger.critical(f"definir : nom de variable interdit → '{destination}' est un mot-clé réservé.")
+        exit(1)
+
+    if not valeur.replace('.', '', 1).isdigit():
+        logger.critical(f"definir : valeur invalide → '{valeur}' n’est pas un nombre.")
+        exit(1)
+
+    try:
+        valeur = int(valeur)
+    except ValueError:
+        valeur = float(valeur)
+
     variable[destination] = valeur
+    logger.info(f"definir : variable définie → {destination} = {valeur}")
+
 
 def ecrire(instruc: list): # instruc[variable]
     #print(instruc)
 
-    if len(instruc) < 1: 
-        logger.critical("Vous ne pouvez ecrire que le contenue d'une variable ou un label d'une chainec")
-        exit()
+    if len(instruc) < 1:
+        error_and_exit("ecrire", f"Syntaxe erreur, ecrire [var ou chainec]")
 
     final = ""
     for i in range(len(instruc)):
@@ -100,7 +110,7 @@ def ecrire(instruc: list): # instruc[variable]
         elif is_chainec(instruc[i]):
             final += get_chainec(instruc[i])
         else:
-            logger.critical("Cette variable n'existe pas")
+            error_and_exit("ecrire", f"Cette variable n'existe pas : {instruc[i]}")
         
         final += " "
 
@@ -110,8 +120,7 @@ def ecrire(instruc: list): # instruc[variable]
 def somme(instruc: list):
     # Que une variable a la fois
     if len(instruc) != 3:
-        logger.critical("Syntaxe erreur: somme a b destination")
-        exit()
+        error_and_exit("somme", f"Syntaxe erreur: somme a b destination")
     
     arg_a = instruc[0]
     arg_b = instruc[1]
@@ -125,14 +134,13 @@ def somme(instruc: list):
         definir([destination, total])
              
     else:
-        logger.critical("Syntaxe erreur: les 2 variables doivent etre des Nombres")
+        error_and_exit("somme", f"Syntaxe erreur: les 2 variables doivent etre des Nombres")
 
 def soustraire(instruc: list):
     # Que une variable a la fois
     if len(instruc) != 3:
-        logger.critical("Syntaxe erreur: somme a b destination")
-        exit()
-    
+        error_and_exit("soustraire", f"Syntaxe erreur: soustraire a b destination")
+
     arg_a = instruc[0]
     arg_b = instruc[1]
     destination = instruc[2]
@@ -145,13 +153,12 @@ def soustraire(instruc: list):
         definir([destination, total])
              
     else:
-        logger.critical("Syntaxe erreur: les 2 variables doivent etre des Nombres")
+        error_and_exit("soustraire", f"Syntaxe erreur: les 2 variables doivent etre des Nombres")
 
 def charger(instruc: list):
     #print(instruc)
     if len(instruc) <= 1:
-        logger.critical("Syntaxe erreur: charger .dest. chaine de charactere")
-        exit()
+        error_and_exit("charger", f"Syntaxe erreur: charger .dest. chaine de charactere")
     
     destination: str = instruc[0]
     valeur: str = ' '.join(instruc[1:])
@@ -159,6 +166,5 @@ def charger(instruc: list):
     if destination.startswith(".") and destination.endswith("."):
         chainec[destination] = valeur
     else:
-        logger.critical("Le nom n'a pas le bon format")
-        exit()
+        error_and_exit("charger", f"Syntaxe erreur: charger .dest.")
 

@@ -15,7 +15,7 @@ def create_sous_partie(contenue):
                 #print(contenue[i][:-1], " pointeur : ", i)
                 sous_partie_memory[contenue[i][:-1]] = i
             else:
-                logger.critical(f"Il y a 2 sections {contenue[i]}")
+                error_and_exit("create_sous_partie", f"Il y a 2 sections {contenue[i]}")
 
     #if "Initialisation:" in sous_partie_memory:
     #    return get_sous_partie("Initialisation:")
@@ -27,31 +27,27 @@ def get_sous_partie(partie):
     #print(partie)
     if partie in sous_partie_memory:
         #print("Pointeur = ", sous_partie_memory[partie])
+        #print(partie, sous_partie_memory[partie])
         return sous_partie_memory[partie]
-    logger.critical(f"Erreur : Partie {partie} pas trouvé")
-    exit()
+    error_and_exit("get_sous_partie", f"Erreur : Partie {partie} pas trouvé")
+    return None
 
 def aller(dest, pointeur_value):
     if len(dest) != 1:
-        logger.error("Syntaxe error: l'instruction aller ne prend que un argument")
+        error_and_exit("aller","Syntaxe error: l'instruction aller [destination]")
 
     destination = dest[0]
 
     pile_sous_partie.append(pointeur_value)
-    #print(pile_sous_partie)
+    #print("log sous partie",pile_sous_partie)
     return get_sous_partie(destination)
 
 
 def revenir():
-    if len(pile_sous_partie) != 0:
-        logger.critical("Vous n'etes pas rentrer dans une sous partie")
-        exit()
-
+    if len(pile_sous_partie) == 0:
+        error_and_exit("revenir","Vous n'etes pas rentrer dans une sous partie")
 
     return pile_sous_partie.pop()
-
-
-# La fin de sous partie devrait etre des que il y aura une ligne vide, si c'est la partie main on fini le programme
 
 #### Début du programme
 
@@ -76,22 +72,26 @@ contenu = fichier.read_text()
 contenue_lecture = contenu.splitlines()
 
 # Initialisation
-pointeur = create_sous_partie(contenue_lecture) - 1
+pointeur = create_sous_partie(contenue_lecture)
 running = True
-pile_sous_partie = []
 
 while running:
     pointeur += 1
-    if pointeur == len(contenue_lecture) - 1:
+    #print(pointeur)
+    if pointeur == len(contenue_lecture):
         running = False
 
     ligne = contenue_lecture[pointeur]
+    instruc = ligne.strip().split(' ')
+    # print(instruc)
 
     # Ligne commentaire
     if ligne.startswith('#'):
         continue
-
-    instruc = ligne.strip().split(' ')
+    # Execution erreur
+    # Cas ou on trouve un format de sous partie
+    if len(instruc) == 1 and instruc[0].endswith(":") and instruc[0][0].isupper():
+        error_and_exit("Main", "Execution erreur, avez vous bien utiliser revenir ?")
 
     match instruc[0]:
         case "definir":
@@ -104,15 +104,19 @@ while running:
             ecrire(instruc[1:])
         case "charger":
             charger(instruc[1:])
+            #print("chargement")
         case "aller":
             pointeur = aller(instruc[1:], pointeur)
-            #print(pile_sous_partie)
         case "revenir":
             pointeur = revenir()
-            print(pointeur)
+            #print("Revenir a ", pointeur)
+            #print("Prochaine instruction :", contenue_lecture[pointeur].strip().split(' '))
         case "fin":
             running = False
-        case _:
+            #print("fin appeler")
+        case "":
             pass
+        case _:
+            error_and_exit("Main", f"Instruction {instruc[0]} inconnu")
 
 logger.success("Fin du programme")
