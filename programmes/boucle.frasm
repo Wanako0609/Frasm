@@ -1,0 +1,33 @@
+Initialisation:
+charger .debut. Bonjour, merci d'utiliser France Assembleur
+charger .boucle. Voici une boucle jusqu'a 10
+charger .debut_boucle. Debut de la boucle
+charger .i=. i=
+charger .fin_boucle. La boucle est fini
+definir incrementeur_1 1
+definir i 0
+definir max 10
+
+revenir
+
+Principale:
+ecrire .debut.
+ecrire .boucle. .debut_boucle.
+ecrire .i=. i
+
+aller Boucle
+
+Boucle:
+si i >= max aller Fin_boucle
+sinon aller Incrementer
+fin
+
+Incrementer:
+somme i incrementeur_1 i
+ecrire .i=. i
+aller Boucle
+
+Fin_boucle:
+ecrire .fin_boucle. .i=. i
+fin
+

@@ -1,0 +1,21 @@
+Principale:
+definir a 10
+definir b 5
+soustraire a b total
+si total > a aller Plus_10
+sinon aller Moins_10
+
+Plus_10:
+charger .afficher. 10 + 5 =
+ecrire .afficher. total
+aller Afficher_fin
+
+Moins_10:
+charger .afficher. 10 - 5 =
+ecrire .afficher. total
+aller Afficher_fin
+
+Afficher_fin:
+charger .fin_. Fin du programme
+ecrire .fin_.
+fin

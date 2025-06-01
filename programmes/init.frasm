@@ -1,0 +1,12 @@
+Initialisation:
+charger .ok. ok
+charger .1. 1
+charger .2. 2
+definir a 10
+definir b 20
+#somme a b c
+revenir
+
+Principale:
+ecrire a b .1. .2. .ok.
+fin

@@ -39,38 +39,63 @@ Le programme est structuré en différentes sections, dont la section `Principal
 ## Exemple de programme FRASM
 
 ```frasm
-Principal: # Section principale obligatoire
-definir a 10 # a = 10
-definir b 5  # b = 5
-somme a b total # total = a + b
-ecrire total # affiche 15
-si total > 10 aller Plus_10 
-sinon aller Moins_10
+Initialisation:
+# Chargement des chaines de characteres
+charger .debut. Bonjour, merci d'utiliser France Assembleur
+charger .boucle. Voici une boucle jusqu'a 10
+charger .debut_boucle. Debut de la boucle
+charger .i=. i=
+charger .fin_boucle. La boucle est fini
+# Definition des variables
+definir incrementeur_1 1
+definir i 0
+definir max 10
 
-Plus_10:
-charger .afficher. 10 + 5 = 
-ecrire .afficher.
-ecrire total
-aller Fin_Affichage
+revenir
 
-Moins_10:
-charger .afficher. 10 - 5 = 
-ecrire .afficher.
-ecrire total
-aller Fin_Affichage
+# Sous partie principale
+Principale:
+ecrire .debut.
+ecrire .boucle. .debut_boucle.
+ecrire .i=. i
 
-Fin_Affichage:
-charger .fin_. Fin du programme
-ecrire .fin_.
+aller Boucle
+
+# Condition de la boucle
+Boucle:
+si i >= max aller Fin_boucle
+sinon aller Incrementer
+fin
+
+# Incrementation + code executer durant la boucle
+Incrementer:
+somme i incrementeur_1 i
+ecrire .i=. i
+aller Boucle
+
+# Fin de la boucle
+Fin_boucle:
+ecrire .fin_boucle. .i=. i
 fin
 ```
 
 **Résultat attendu :**
 
 ```
-15
-10 + 5 = 15
-Fin du programme
+Bonjour, merci d'utiliser France Assembleur 
+Voici une boucle jusqu'a 10 Debut de la boucle 
+i= 0 
+i= 1 
+i= 2 
+i= 3 
+i= 4 
+i= 5 
+i= 6 
+i= 7 
+i= 8 
+i= 9 
+i= 10 
+La boucle est fini i= 10 
 ```
 
 ---

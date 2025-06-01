@@ -1,0 +1,34 @@
+
+
+Si_positif:
+charger .positif. C'est positif
+ecrire .positif.
+revenir
+
+Si_negatif:
+charger .negatif. C'est negatif
+ecrire .negatif.
+revenir
+
+Principale:
+definir a 7
+definir b 8
+somme a b c
+definir d 10
+soustraire d c e
+definir zero 0
+si e < zero aller Si_negatif
+sinon aller Si_positif
+
+charger .comm. Le resultat est
+ecrire .comm. e
+
+charger .test_chaine. On va maintenant tester les chaines
+ecrire .test_chaine.
+
+charger .oui. oui
+charger .non. non
+si .oui. != .non. aller Si_positif
+sinon aller Si_negatif
+
+fin
